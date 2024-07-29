@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const fs = require("fs");
 
 const app = express();
 const PORT = 3003;
@@ -10,6 +11,23 @@ app.use(cors());
 
 let users = [];
 let purchasedCourses = [];
+
+// Load users and purchasedCourses from file
+const loadData = () => {
+  if (fs.existsSync("data.json")) {
+    const data = JSON.parse(fs.readFileSync("data.json", "utf8"));
+    users = data.users || [];
+    purchasedCourses = data.purchasedCourses || [];
+  }
+};
+
+// Save users and purchasedCourses to file
+const saveData = () => {
+  const data = { users, purchasedCourses };
+  fs.writeFileSync("data.json", JSON.stringify(data));
+};
+
+loadData();
 
 app.post("/signup", (req, res) => {
   const { id, pass, name, email, add, country } = req.body;
@@ -22,6 +40,7 @@ app.post("/signup", (req, res) => {
   }
 
   users.push({ id, pass, name, email, add, country });
+  saveData();
   return res.json({ message: "Signup successful." });
 });
 
@@ -59,6 +78,7 @@ app.post("/purchase-course", (req, res) => {
     price,
     image,
   });
+  saveData();
   console.log("Purchased courses:", purchasedCourses);
   res.json({ message: "Course purchased successfully." });
 });
