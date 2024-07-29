@@ -10,7 +10,6 @@ function Dashboard({ courses, setCourses }) {
     price: "",
   });
 
-  // Retrieve courses from local storage when the component mounts
   useEffect(() => {
     const storedCourses = JSON.parse(localStorage.getItem("courses"));
     if (storedCourses) {

@@ -12,7 +12,6 @@ app.use(cors());
 let users = [];
 let purchasedCourses = [];
 
-// Load users and purchasedCourses from file
 const loadData = () => {
   if (fs.existsSync("data.json")) {
     const data = JSON.parse(fs.readFileSync("data.json", "utf8"));
@@ -21,7 +20,6 @@ const loadData = () => {
   }
 };
 
-// Save users and purchasedCourses to file
 const saveData = () => {
   const data = { users, purchasedCourses };
   fs.writeFileSync("data.json", JSON.stringify(data));
